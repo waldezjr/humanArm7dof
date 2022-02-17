@@ -14,7 +14,7 @@ panda.q = panda.qr
 
 # Set a desired and effector pose an an offset from the current end-effector pose
 env.add(panda, robot_alpha=0.5)
-Tep = panda.fkine(panda.q) * sm.SE3.Tx(0) * sm.SE3.Ty(-0.1) * sm.SE3.Tz(0)
+Tep = panda.fkine(panda.q) * sm.SE3.Tx(0) * sm.SE3.Ty(-0.1) * sm.SE3.Tz(0) * sm.SE3.Rz(30,'deg')
 
 axes = sg.Axes(length=0.1, base =Tep)
 

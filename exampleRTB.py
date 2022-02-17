@@ -19,5 +19,5 @@ q_pickup = sol.q
 print(robot.fkine(q_pickup))    # FK shows that desired end-effector pose was achieved
 
 qt = rtb.jtraj(robot.qz, q_pickup, 50)
-# robot.plot(qt.q, movie='panda1.gif', limits = [-1,1,-0.5,0.5,0,1])
-robot.teach(q_pickup,limits = [-1,1,-0.5,0.5,0,1])
+robot.plot(qt.q, movie='panda1.gif', limits = [-1,1,-0.5,0.5,0,1])
+# robot.teach(q_pickup,limits = [-1,1,-0.5,0.5,0,1])
