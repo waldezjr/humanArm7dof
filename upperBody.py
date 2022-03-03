@@ -32,18 +32,17 @@ class upperBody(ERobot):
             name=name,
             manufacturer="dhm",
             urdf_string=urdf_string,
-            urdf_filepath=urdf_filepath,
+            urdf_filepath=urdf_filepath
         )
-        qzero = np.zeros(24)
+        qzero = np.zeros(4)
+        # right shoulder
+        qzero[0] = 1.39626
+        # right elbow
+        qzero[3] = 0.610865
         # left shoulder
-        qzero[17] = -1.39626
-        # left elbow
-        qzero[20] = 0.610865
-        # qzero[18] = 0.79
-        # # right shoulder
-        qzero[8] = 1.39626
-        # left elbow
-        qzero[11] = 0.523599
+        # qzero[7] = -1.39626
+        # # left elbow
+        # qzero[10] = 0.610865
         self.addconfiguration("qz", qzero)
         # self.addconfiguration("qr", np.array([0, -0.3, 0, -2.2, 0, 2.0, np.pi / 4]))
 

@@ -3,8 +3,8 @@
 
 	<!-- These values must be entered manually -->
 	<!-- Average BMI = 22. If above, enter 1, else enter 0 -->
-	<xacro:property name="bodyHeight" value="1.83" />
-	<xacro:property name="bodyMass" value="88" />
+	<xacro:property name="bodyHeight" value="1.80" />
+	<xacro:property name="bodyMass" value="110" />
 	<xacro:property name="BMI" value="${bodyMass/(bodyHeight*bodyHeight)}" />
 	<xacro:property name="isBMIgreaterThanAverage" value="0"/>
 	<!-- From now on, nothing should be changed in the file -->
@@ -185,18 +185,18 @@
 			<geometry>
 				<box size="${pelvis_depth} ${pelvis_width} ${pelvis_length}"/>
 			</geometry>
-			<origin rpy="0 0 0" xyz="0 0 ${pelvis_length/2-hip_thickness}"/>
+			<origin rpy="0 0 0" xyz="0 0 ${pelvis_length/2}"/>
 			<material name="blue" />
 		</visual>
 		<collision>
 			<geometry>
 				<box size="${collision_depth_factor*pelvis_depth} ${collision_width_factor*pelvis_width} ${collision_height_factor*pelvis_length}"/>
 			</geometry>
-			<origin rpy="0 0 0" xyz="0 0 ${pelvis_length/2-hip_thickness}"/>
+			<origin rpy="0 0 0" xyz="0 0 ${pelvis_length/2}"/>
 		</collision>
 		<inertial>
 			<mass value="${0.7*pelvis_mass}" />
-			<origin rpy="0 0 0" xyz="0 0 ${pelvis_length/2-hip_thickness}"/>
+			<origin rpy="0 0 0" xyz="0 0 ${pelvis_length/2}"/>
 			<xacro:box_inertia m="${0.7*pelvis_mass}" Lx="${pelvis_depth}" Ly="${pelvis_width}" Lz="${pelvis_length}"/>
 		</inertial>
 	</link>
@@ -339,20 +339,6 @@
 	</link>
 
 	
-<joint name="right_hand_fixed" type="fixed">
-   <origin rpy="0 0 0 " xyz="0.0 0.0 ${hand_length / 2}"/>
-   <child link="right_hand_gripper"/>
-   <parent link="right_hand"/>
-   <axis use_parent_model_frame="1" xyz="0 0 0"/>
-   <dynamics damping="0" friction="0" spring_reference="0" spring_stiffness="0"/>
- </joint>
- <link name="right_hand_gripper">
-   <inertial>
-     <origin xyz="0 0 0"/>
-     <mass value="0.000001"/>
-     <inertia ixx="0.000001" ixy="0.000001" ixz="0.000001" iyy="0.000001" iyz="0.000001" izz="0.000001"/>
-   </inertial>
- </link>
 
 <xacro:virtual_body name="body_T4_left_clavicular" m="${0.1*thoracicspine_mass}"/>
 
@@ -450,7 +436,7 @@
 
 
 	<!-- Back joints -->
-	<joint name="lumbarspine_X" type="revolute">
+	<joint name="lumbarspine_X" type="fixed">
 		<parent link="pelvis"/>
 		<child link="body_L5_1"/>
 		<axis xyz="1 0 0"/>
@@ -460,7 +446,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="lumbarspine_Y" type="revolute">
+	<joint name="lumbarspine_Y" type="fixed">
 		<parent link="body_L5_1"/>
 		<child link="body_L5_2"/>
 		<axis xyz="0 1 0"/>
@@ -470,7 +456,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="lumbarspine_Z" type="revolute">
+	<joint name="lumbarspine_Z" type="fixed">
 		<parent link="body_L5_2"/>
 		<child link="lumbar_spine"/>
 		<axis xyz="0 0 1"/>
@@ -479,7 +465,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="thoracicspine_X" type="revolute">
+	<joint name="thoracicspine_X" type="fixed">
 		<parent link="lumbar_spine"/>
 		<child link="body_T8_1"/>
 		<axis xyz="1 0 0"/>
@@ -488,7 +474,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="thoracicspine_Y" type="revolute">
+	<joint name="thoracicspine_Y" type="fixed">
 		<parent link="body_T8_1"/>
 		<child link="body_T8_2"/>
 		<axis xyz="0 1 0"/>
@@ -497,7 +483,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="thoracicspine_Z" type="revolute">
+	<joint name="thoracicspine_Z" type="fixed">
 		<parent link="body_T8_2"/>
 		<child link="thoracic_spine"/>
 		<axis xyz="0 0 1"/>
@@ -507,7 +493,7 @@
 	</joint>
 
 	<!-- Right arm joints -->
-	<joint name="right_clavicular_X" type="revolute">
+	<joint name="right_clavicular_X" type="fixed">
     <!-- flexion (elevation) -->   
 		<parent link="thoracic_spine"/>
 		<child link="body_T4_right_clavicular"/>
@@ -517,7 +503,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="right_clavicular_Y" type="revolute">
+	<joint name="right_clavicular_Y" type="fixed">
     <!-- abduction -->
 		<parent link="body_T4_right_clavicular"/>
 		<child link="right_clavicular"/>
@@ -533,7 +519,7 @@
 		<child link="body_right_shoulder_1"/>
 		<axis xyz="1 0 0"/>
 		<origin xyz="0 0 ${CSJ_shoulder}"/>
-		<limit effort="${69*forceCapacity}" lower="-1.571" upper="${PI}" velocity="${maxVelJoint}"/>
+		<limit effort="${69*forceCapacity}" lower="0" upper="${PI}" velocity="${maxVelJoint}"/>
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
@@ -543,7 +529,7 @@
 		<child link="body_right_shoulder_2"/>
 		<axis xyz="0 1 0"/>
 		<origin xyz="0 0 0"/>
-		<limit effort="${90*forceCapacity}" lower="${-PI/2}" upper="${PI/2}" velocity="${maxVelJoint}"/>
+		<limit effort="${90*forceCapacity}" lower="${0}" upper="${PI/4}" velocity="${maxVelJoint}"/>
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
@@ -553,7 +539,7 @@
 		<child link="right_arm"/>
 		<axis xyz="0 0 1"/>
 		<origin xyz="0 0 0"/>
-		<limit effort="${51*forceCapacity}" lower="-1.658" upper="1.396" velocity="${maxVelJoint}"/>
+		<limit effort="${51*forceCapacity}" lower="0" upper="${PI/2}" velocity="${maxVelJoint}"/>
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
@@ -568,7 +554,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="right_elbow_Z" type="revolute">
+	<joint name="right_elbow_Z" type="fixed">
     <!-- pronosupination -->
 		<parent link="body_right_elbow"/>
 		<child link="right_forearm"/>
@@ -578,7 +564,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="right_wrist_X" type="revolute">
+	<joint name="right_wrist_X" type="fixed">
     <!-- flexion -->
 		<parent link="right_forearm"/>
 		<child link="body_right_wrist"/>
@@ -588,7 +574,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="right_wrist_Y" type="revolute">
+	<joint name="right_wrist_Y" type="fixed">
     <!-- abduction -->
 		<parent link="body_right_wrist"/>
 		<child link="right_hand"/>
@@ -598,7 +584,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_clavicular_X" type="revolute">
+	<joint name="left_clavicular_X" type="fixed">
     <!-- flexion (elevation) --> 
 		<parent link="thoracic_spine"/>
 		<child link="body_T4_left_clavicular"/>
@@ -609,7 +595,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_clavicular_Y" type="revolute">
+	<joint name="left_clavicular_Y" type="fixed">
     <!-- abduction -->
 		<parent link="body_T4_left_clavicular"/>
 		<child link="left_clavicular"/>
@@ -621,7 +607,7 @@
 	</joint>
 
 
-	<joint name="left_shoulder_X" type="revolute">
+	<joint name="left_shoulder_X" type="fixed">
     <!-- abduction -->
 		<parent link="left_clavicular"/>
 		<child link="body_left_shoulder_1"/>
@@ -631,7 +617,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_shoulder_Y" type="revolute">
+	<joint name="left_shoulder_Y" type="fixed">
     <!-- flexion -->
 		<parent link="body_left_shoulder_1"/>
 		<child link="body_left_shoulder_2"/>
@@ -641,7 +627,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_shoulder_Z" type="revolute">
+	<joint name="left_shoulder_Z" type="fixed">
     <!-- rotation -->
 		<parent link="body_left_shoulder_2"/>
 		<child link="left_arm"/>
@@ -651,7 +637,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_elbow_Y" type="revolute">
+	<joint name="left_elbow_Y" type="fixed">
     <!-- flexion -->
 		<parent link="left_arm"/>
 		<child link="body_left_elbow"/>
@@ -662,7 +648,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_elbow_Z" type="revolute">
+	<joint name="left_elbow_Z" type="fixed">
     <!-- pronosupination -->
 		<parent link="body_left_elbow"/>
 		<child link="left_forearm"/>
@@ -672,7 +658,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_wrist_X" type="revolute">
+	<joint name="left_wrist_X" type="fixed">
     <!-- flexion -->
 		<parent link="left_forearm"/>
 		<child link="body_left_wrist"/>
@@ -682,7 +668,7 @@
 		<dynamics damping="${jointDamping}" friction="${jointFriction}"/>
 	</joint>
 
-	<joint name="left_wrist_Y" type="revolute">
+	<joint name="left_wrist_Y" type="fixed">
     <!-- abduction -->
 		<parent link="body_left_wrist"/>
 		<child link="left_hand"/>

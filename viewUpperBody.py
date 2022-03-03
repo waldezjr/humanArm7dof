@@ -14,6 +14,8 @@ env.launch(realtime=True)            # activate it
 axes = sg.Axes(length=0.1)
 env.add(axes)
 
+print(dhm.n)
+
 dhm.q=dhm.qz
 env.add(dhm)
 env.hold()
